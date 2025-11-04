@@ -10,6 +10,7 @@ export const mockCrafts: Craft[] = [
     description: 'A simple and fun way to turn plastic waste into beautiful planters for your home or garden. This project is great for all ages and requires minimal tools.',
     rating: 4.5,
     reviewCount: 120,
+    price: 12.99,
   },
   {
     id: '2',
@@ -19,6 +20,7 @@ export const mockCrafts: Craft[] = [
     description: 'Transform an old t-shirt into a stylish and durable tote bag without any sewing! Perfect for groceries, books, or as a unique fashion accessory.',
     rating: 4.8,
     reviewCount: 250,
+    price: 19.99,
   },
   {
     id: '3',
@@ -28,6 +30,7 @@ export const mockCrafts: Craft[] = [
     description: 'Create stunning, intricate wall art using nothing more than toilet paper or paper towel rolls. A cheap and chic way to decorate your space.',
     rating: 4.2,
     reviewCount: 85,
+    price: 24.50,
   },
   {
     id: '4',
@@ -37,6 +40,7 @@ export const mockCrafts: Craft[] = [
     description: 'Light up your evenings with beautiful lanterns made from old glass jars. Customize them with paint, twine, or other decorations for a magical ambiance.',
     rating: 4.6,
     reviewCount: 150,
+    price: 15.00,
   },
 ];
 

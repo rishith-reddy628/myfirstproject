@@ -6,6 +6,7 @@ export interface Craft {
   description: string;
   rating: number;
   reviewCount: number;
+  price?: number;
 }
 
 export interface CommunityPost {

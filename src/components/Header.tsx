@@ -11,6 +11,7 @@ const navLinks = [
   { href: '/ai-generator', label: 'AI Ideas' },
   { href: '/waste-guide', label: 'Waste Guide' },
   { href: '/community', label: 'Community' },
+  { href: '/buy-craft', label: 'Buy Craft' },
 ];
 
 export function Header() {
