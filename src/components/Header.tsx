@@ -12,6 +12,7 @@ const navLinks = [
   { href: '/waste-guide', label: 'Waste Guide' },
   { href: '/community', label: 'Community' },
   { href: '/buy-craft', label: 'Buy Craft' },
+  { href: '/sell-craft', label: 'Sell Craft' },
 ];
 
 export function Header() {
