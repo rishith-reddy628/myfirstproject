@@ -1,6 +1,6 @@
 'use client';
 
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState, useFormStatus } from 'react';
 import { generateIdeasAction, FormState } from './actions';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,7 +22,7 @@ function SubmitButton() {
 
 export function IdeaForm() {
   const initialState: FormState = { message: '' };
-  const [state, formAction] = useFormState(generateIdeasAction, initialState);
+  const [state, formAction] = useActionState(generateIdeasAction, initialState);
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
 
