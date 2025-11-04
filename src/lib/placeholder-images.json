@@ -1,3 +1,52 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-background",
+      "description": "A bright, airy workshop with craft materials on a wooden table.",
+      "imageUrl": "https://images.unsplash.com/photo-1750498407644-ed88cc6bbac4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjcmFmdCUyMHdvcmtzaG9wfGVufDB8fHx8MTc2MjI2NDQzMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "craft workshop"
+    },
+    {
+      "id": "craft-idea-1",
+      "description": "A planter made from a recycled plastic bottle.",
+      "imageUrl": "https://images.unsplash.com/photo-1730266667935-85f7b60b7b15?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxib3R0bGUlMjBwbGFudGVyfGVufDB8fHx8MTc2MjI2NDQzMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "bottle planter"
+    },
+    {
+      "id": "craft-idea-2",
+      "description": "A tote bag made from old t-shirts.",
+      "imageUrl": "https://images.unsplash.com/photo-1647426203650-ba80c0848fcb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxmYWJyaWMlMjBiYWd8ZW58MHx8fHwxNzYyMjY0NDMwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fabric bag"
+    },
+    {
+      "id": "craft-idea-3",
+      "description": "A decorative wall hanging from cardboard rolls.",
+      "imageUrl": "https://images.unsplash.com/photo-1643443832211-a641656e698f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjYXJkYm9hcmQlMjBhcnR8ZW58MHx8fHwxNzYyMjY0NDMxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "cardboard art"
+    },
+    {
+      "id": "community-post-1",
+      "description": "A person holding up a colorful bird feeder made from a milk carton.",
+      "imageUrl": "https://images.unsplash.com/photo-1650726583448-dda0065f2f11?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwZXJzb24lMjBjcmFmdHxlbnwwfHx8fDE3NjIyNjQ0MzB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person craft"
+    },
+    {
+      "id": "community-post-2",
+      "description": "Close up of a mosaic picture frame made from broken tiles.",
+      "imageUrl": "https://images.unsplash.com/photo-1741568715706-441beacc8ffe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxtb3NhaWMlMjBmcmFtZXxlbnwwfHx8fDE3NjIyNjQ0MzF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "mosaic frame"
+    },
+    {
+      "id": "waste-guide-dry",
+      "description": "An assortment of dry waste like paper, plastic, and glass.",
+      "imageUrl": "https://images.unsplash.com/photo-1619641805634-b867f535071c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxkcnklMjB3YXN0ZXxlbnwwfHx8fDE3NjIyNjQ0MzB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "dry waste"
+    },
+    {
+      "id": "waste-guide-wet",
+      "description": "A compost bin with vegetable peels and other wet waste.",
+      "imageUrl": "https://images.unsplash.com/photo-1597799864620-61ac6ba1b5aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx3ZXQlMjB3YXN0ZXxlbnwwfHx8fDE3NjIyNjQ0MzB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wet waste"
+    }
+  ]
 }
