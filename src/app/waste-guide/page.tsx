@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
+import { Chatbot } from "./Chatbot";
 
 export const metadata = {
   title: 'Waste Segregation Guide',
@@ -100,6 +101,8 @@ export default function WasteGuidePage() {
             ))}
         </Accordion>
       </div>
+
+      <Chatbot />
     </div>
   );
 }
