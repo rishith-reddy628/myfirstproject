@@ -1,7 +1,6 @@
 'use server';
 
-import { addDoc, collection } from 'firebase/firestore';
-import { getFirestore } from 'firebase/firestore/lite';
+import { addDoc, collection, getFirestore } from 'firebase/firestore';
 import { initializeFirebase } from '@/firebase';
 import { z } from 'zod';
 
@@ -55,12 +54,11 @@ export async function sellCraftAction(
   // and get a download URL. For now, we'll use a placeholder.
   const imageURL = 'https://picsum.photos/seed/placeholder/600/400';
 
-  const { firestore } = initializeFirebase();
-  if (!firestore) {
-    return { message: 'Firestore is not initialized.' };
-  }
-
   try {
+    // This is a server action, we need to initialize firebase here
+    // but without calling a 'use client' function.
+    // We can't use the hook `useFirebase` so we initialize it directly.
+    const { firestore } = initializeFirebase();
     const marketplaceListingsRef = collection(firestore, 'marketplace_listings');
     await addDoc(marketplaceListingsRef, {
       name: parsed.data.title,
