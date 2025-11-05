@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { ShoppingCart, Star, Search } from 'lucide-react';
@@ -9,7 +9,8 @@ import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { FirebaseClientProvider, useCollection, useFirebase } from '@/firebase';
-import type { MarketplaceListing } from '@/lib/types';
+import type { MarketplaceListing, Craft } from '@/lib/types';
+import { mockCrafts } from '@/lib/mock-data';
 import { collection, query } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -27,11 +28,40 @@ function BuyCraftClient() {
 
   const { data: listings, isLoading } = useCollection<MarketplaceListing>(listingsQuery);
 
+  const allCrafts = useMemo(() => {
+    const firestoreCrafts = listings ? listings.map(l => ({
+        id: l.id,
+        title: l.name,
+        material: l.material,
+        description: l.description,
+        price: l.price,
+        imageURL: l.imageURL,
+        rating: 0, // No rating from firestore yet
+        reviewCount: 0,
+        isFromFirestore: true
+    })) : [];
+
+    const mockCraftsAsListings = mockCrafts.map(c => ({
+        id: c.id,
+        title: c.title,
+        material: c.material,
+        description: c.description,
+        price: c.price,
+        imageURL: `https://img.youtube.com/vi/${c.youtubeId}/hqdefault.jpg`,
+        rating: c.rating,
+        reviewCount: c.reviewCount,
+        youtubeId: c.youtubeId,
+        isFromFirestore: false
+    }));
+
+    return [...firestoreCrafts, ...mockCraftsAsListings];
+  }, [listings]);
+
+
   const filteredCrafts = useMemo(() => {
-    if (!listings) return [];
-    return listings.filter((craft) => {
+    return allCrafts.filter((craft) => {
       const matchesSearch =
-        craft.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        craft.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         craft.material.toLowerCase().includes(searchTerm.toLowerCase());
       
       const matchesMaterial =
@@ -39,7 +69,7 @@ function BuyCraftClient() {
 
       return matchesSearch && matchesMaterial;
     });
-  }, [listings, searchTerm, selectedMaterial]);
+  }, [allCrafts, searchTerm, selectedMaterial]);
 
   return (
     <>
@@ -72,7 +102,7 @@ function BuyCraftClient() {
       </div>
 
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-        {isLoading && Array.from({ length: 4 }).map((_, i) => (
+        {isLoading && Array.from({ length: 8 }).map((_, i) => (
            <Card key={i}>
                 <CardHeader className="p-0">
                     <Skeleton className="h-64 w-full" />
@@ -94,35 +124,47 @@ function BuyCraftClient() {
           filteredCrafts.map((craft) => (
             <Card key={craft.id} className="h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group">
                 <CardHeader className="p-0">
-                    <div className="block">
+                    <Link href={craft.isFromFirestore ? `/buy-craft/${craft.id}`: `/crafts/${craft.id}`} className="block">
                         <div className="relative h-64 w-full">
                         <Image
-                            src={craft.imageURL}
-                            alt={craft.name}
+                            src={craft.imageURL || ''}
+                            alt={craft.title}
                             fill
                             className="object-cover"
                             data-ai-hint={craft.material}
                         />
                         </div>
-                    </div>
+                    </Link>
                 </CardHeader>
                 <CardContent className="p-4">
                     <CardTitle className="text-lg font-bold group-hover:text-primary">
-                        {craft.name}
+                        <Link href={craft.isFromFirestore ? `/buy-craft/${craft.id}`: `/crafts/${craft.id}`}>
+                           {craft.title}
+                        </Link>
                     </CardTitle>
                     <CardDescription className="mt-2 text-sm">{craft.material}</CardDescription>
                 </CardContent>
                 <CardFooter className="flex flex-col items-start gap-4 p-4 pt-0">
                     <div className="flex items-center justify-between w-full">
                         <div className="flex items-center gap-1 text-sm text-amber-500">
-                            {/* Placeholder for rating */}
+                           {craft.rating > 0 && (
+                            <>
+                                <Star className="h-4 w-4 fill-current" />
+                                <span>{craft.rating}</span>
+                                <span className="ml-1 text-foreground/50">({craft.reviewCount})</span>
+                            </>
+                           )}
                         </div>
-                        <p className="text-lg font-semibold text-primary">${craft.price?.toFixed(2)}</p>
+                        {craft.price && <p className="text-lg font-semibold text-primary">${craft.price?.toFixed(2)}</p>}
                     </div>
-                    <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+                    {craft.isFromFirestore ? <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
                         <ShoppingCart className="mr-2 h-4 w-4"/>
                         Add to Cart
+                    </Button> :
+                    <Button variant="outline" className="w-full" asChild>
+                        <Link href={`/crafts/${craft.id}`}>View Tutorial</Link>
                     </Button>
+                    }
                 </CardFooter>
             </Card>
           ))
