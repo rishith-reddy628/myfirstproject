@@ -1,6 +1,6 @@
 'use server';
 
-import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import { addDoc, collection } from 'firebase/firestore';
 import { initializeFirebase } from '@/firebase';
 import { z } from 'zod';
 
@@ -55,12 +55,15 @@ export async function sellCraftAction(
   const imageURL = 'https://picsum.photos/seed/placeholder/600/400';
 
   try {
-    // This is a server action, we need to initialize firebase here
-    // but without calling a 'use client' function.
-    // We can't use the hook `useFirebase` so we initialize it directly.
+    // Server actions can't use client-side hooks.
+    // We initialize a new instance of firebase for the action.
     const { firestore } = initializeFirebase();
     const marketplaceListingsRef = collection(firestore, 'marketplace_listings');
-    await addDoc(marketplaceListingsRef, {
+    
+    // The addDoc function is non-blocking and doesn't need to be awaited
+    // in this fire-and-forget context. Error handling is managed by the
+    // global error emitter for permission errors.
+    addDoc(marketplaceListingsRef, {
       name: parsed.data.title,
       description: parsed.data.description,
       material: parsed.data.material,
@@ -68,6 +71,9 @@ export async function sellCraftAction(
       imageURL: imageURL,
       // In a real app, you would get the sellerId from the authenticated user
       sellerId: 'temp-user',
+    }).catch(e => {
+        // While the global handler will catch this, logging here can be useful for server-side debugging.
+        console.error("Failed to add document:", e);
     });
     
     return {
@@ -75,9 +81,9 @@ export async function sellCraftAction(
     };
 
   } catch (e: any) {
-    console.error(e);
+    console.error("An unexpected error occurred in sellCraftAction:", e);
     return {
-      message: 'An error occurred while listing the craft. Please try again.',
+      message: 'An unexpected error occurred while listing the craft. Please try again.',
     };
   }
 }

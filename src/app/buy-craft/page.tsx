@@ -8,8 +8,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { FirebaseClientProvider, useCollection, useFirebase } from '@/firebase';
-import type { MarketplaceListing, Craft } from '@/lib/types';
+import { FirebaseClientProvider, useCollection, useFirebase, useMemoFirebase } from '@/firebase';
+import type { MarketplaceListing } from '@/lib/types';
 import { mockCrafts } from '@/lib/mock-data';
 import { collection, query } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -21,7 +21,7 @@ function BuyCraftClient() {
   const [selectedMaterial, setSelectedMaterial] = useState('All');
   
   const { firestore } = useFirebase();
-  const listingsQuery = useMemo(() => {
+  const listingsQuery = useMemoFirebase(() => {
     if (!firestore) return null;
     return query(collection(firestore, 'marketplace_listings'));
   }, [firestore]);
@@ -60,6 +60,7 @@ function BuyCraftClient() {
 
   const filteredCrafts = useMemo(() => {
     return allCrafts.filter((craft) => {
+      if (!craft.title || !craft.material) return false;
       const matchesSearch =
         craft.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         craft.material.toLowerCase().includes(searchTerm.toLowerCase());
