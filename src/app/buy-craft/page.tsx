@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { mockCrafts } from '@/lib/mock-data';
@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 
 const materials = ['All', 'Plastic', 'Paper', 'Fabric', 'Glass'];
 
-export default function BuyCraftPage() {
+function BuyCraftClient() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedMaterial, setSelectedMaterial] = useState('All');
 
@@ -30,12 +30,7 @@ export default function BuyCraftPage() {
   }, [searchTerm, selectedMaterial]);
 
   return (
-    <div className="container mx-auto max-w-7xl py-12">
-      <div className="mb-8 text-center">
-        <h1 className="text-4xl font-bold font-headline">Buy Hand-Made Crafts</h1>
-        <p className="mt-2 text-lg text-foreground/70">Support our creators by purchasing their unique, eco-friendly creations.</p>
-      </div>
-
+    <>
       <div className="mb-8 flex flex-col gap-6 md:flex-row">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
@@ -110,6 +105,30 @@ export default function BuyCraftPage() {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
+}
+
+export default function BuyCraftPage() {
+    const [isClient, setIsClient] = useState(false)
+ 
+    useEffect(() => {
+        setIsClient(true)
+    }, [])
+
+    return (
+        <div className="container mx-auto max-w-7xl py-12">
+            <div className="mb-8 text-center">
+                <h1 className="text-4xl font-bold font-headline">Buy Hand-Made Crafts</h1>
+                <p className="mt-2 text-lg text-foreground/70">Support our creators by purchasing their unique, eco-friendly creations.</p>
+            </div>
+            {isClient && <BuyCraftClient />}
+            {!isClient && (
+                // You can add a placeholder or skeleton loader here
+                <div className="text-center py-16">
+                    <p className="text-muted-foreground">Loading crafts...</p>
+                </div>
+            )}
+        </div>
+    );
 }
