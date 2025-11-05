@@ -158,14 +158,10 @@ function BuyCraftClient() {
                         </div>
                         {craft.price && <p className="text-lg font-semibold text-primary">${craft.price?.toFixed(2)}</p>}
                     </div>
-                    {craft.isFromFirestore ? <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+                    <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
                         <ShoppingCart className="mr-2 h-4 w-4"/>
                         Add to Cart
-                    </Button> :
-                    <Button variant="outline" className="w-full" asChild>
-                        <Link href={`/crafts/${craft.id}`}>View Tutorial</Link>
                     </Button>
-                    }
                 </CardFooter>
             </Card>
           ))
