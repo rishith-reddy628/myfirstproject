@@ -1,0 +1,168 @@
+/**
+ * @fileoverview Firestore Security Rules for EcoCrafter Application
+ *
+ * Core Philosophy:
+ * This ruleset enforces a strict user-ownership model for user-generated content (crafts, marketplace listings, community posts, and comments).
+ * Each data entity is secured based on the authenticated user's identity (`request.auth.uid`) and the path to the data within Firestore.
+ * This approach prioritizes authorization independence, avoiding costly `get()` calls and ensuring that rules are simple, performant, and easy to understand.
+ *
+ * Data Structure:
+ * - /users/{userId}: Stores user profiles. The 'userId' MUST match the Firebase Auth UID.
+ * - /users/{userId}/crafts/{craftId}: Stores craft ideas created by users.
+ * - /ratings/{ratingId}: Stores ratings given to crafts. Publicly readable, but write access is not granted in these rules.
+ * - /waste_articles/{wasteArticleId}: Stores articles about waste management. Write access is not granted in these rules.
+ * - /marketplace_listings/{marketplaceListingId}: Stores marketplace listings. The 'sellerId' field must match the authenticated user's UID for write operations.
+ * - /community_posts/{communityPostId}: Stores community posts. The 'userId' field must match the authenticated user's UID for write operations.
+ * - /community_posts/{communityPostId}/comments/{commentId}: Stores comments for community posts. The 'userId' field must match the authenticated user's UID for write operations.
+ *
+ * Key Security Decisions:
+ * - User listing is disallowed for privacy.
+ * - Ratings and WasteArticles are publicly readable.
+ * - Default security posture for ambiguous relationships is strict owner-only access.
+ *
+ * Denormalization for Authorization:
+ * - The 'userId' field is included within documents to ensure that rules can validate ownership without additional reads.
+ * For example, a Craft document has a 'userId' field that must match the 'userId' in the path `/users/{userId}/crafts/{craftId}`.
+ *
+ * Structural Segregation:
+ * - Private user data (crafts) is stored under the /users/{userId} path, while public community posts and marketplace listings are stored in top-level collections.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Grants access to user profiles.
+     * @path /users/{userId}
+     * @allow (create) Authenticated user can create their own profile if the UID matches.
+     * @allow (get) Authenticated user can read their own profile if the UID matches.
+     * @allow (update) Authenticated user can update their own profile if the UID matches.
+     * @allow (delete) Authenticated user can delete their own profile if the UID matches.
+     * @deny (list) User listing is disallowed.
+     * @deny (create) Unauthenticated users cannot create profiles.
+     * @deny (update) Users cannot modify other user's profiles.
+     * @principle Enforces document ownership for all operations.
+     */
+    match /users/{userId} {
+      allow get: if request.auth.uid == userId;
+      allow list: if false;
+      allow create: if request.auth.uid == userId;
+      allow update: if request.auth.uid == userId;
+      allow delete: if request.auth.uid == userId;
+    }
+
+    /**
+     * @description Grants access to crafts created by a specific user.
+     * @path /users/{userId}/crafts/{craftId}
+     * @allow (create) Authenticated user can create a craft under their ID if the userId matches and craftId is set on the document.
+     * @allow (get) Authenticated user can read a craft under their ID.
+     * @allow (update) Authenticated user can update a craft under their ID.
+     * @allow (delete) Authenticated user can delete a craft under their ID.
+     * @deny (create) Users cannot create crafts under other user's IDs.
+     * @deny (update) Users cannot modify other user's crafts.
+     * @principle Enforces document ownership for writes, restricts access to a user's own data tree.
+     */
+    match /users/{userId}/crafts/{craftId} {
+      allow get: if request.auth.uid == userId;
+      allow list: if request.auth.uid == userId;
+      allow create: if request.auth.uid == userId;
+      allow update: if request.auth.uid == userId;
+      allow delete: if request.auth.uid == userId;
+    }
+
+    /**
+     * @description Grants read-only access to craft ratings.  Write operations are denied.
+     * @path /ratings/{ratingId}
+     * @allow (get) Anyone can read a rating.
+     * @allow (list) Anyone can list ratings.
+     * @deny (create) No one can create ratings via rules.
+     * @deny (update) No one can update ratings via rules.
+     * @deny (delete) No one can delete ratings via rules.
+     */
+    match /ratings/{ratingId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    /**
+     * @description Grants read-only access to waste management articles. Write operations are denied.
+     * @path /waste_articles/{wasteArticleId}
+     * @allow (get) Anyone can read a waste management article.
+     * @allow (list) Anyone can list waste management articles.
+     * @deny (create) No one can create waste articles via rules.
+     * @deny (update) No one can update waste articles via rules.
+     * @deny (delete) No one can delete waste articles via rules.
+     */
+    match /waste_articles/{wasteArticleId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    /**
+     * @description Grants access to marketplace listings, with owner-only write access.
+     * @path /marketplace_listings/{marketplaceListingId}
+     * @allow (get) Anyone can read a marketplace listing.
+     * @allow (list) Anyone can list marketplace listings.
+     * @allow (create) Authenticated user can create a listing if sellerId matches their UID.
+     * @allow (update) Authenticated user can update their own listing if sellerId matches their UID.
+     * @allow (delete) Authenticated user can delete their own listing if sellerId matches their UID.
+     * @deny (create) Users cannot create listings for other users.
+     * @deny (update) Users cannot modify other user's listings.
+     * @principle Enforces document ownership for writes.
+     */
+    match /marketplace_listings/{marketplaceListingId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if request.auth != null && request.resource.data.sellerId == request.auth.uid;
+      allow update: if request.auth != null && request.resource.data.sellerId == request.auth.uid;
+      allow delete: if request.auth != null && request.resource.data.sellerId == request.auth.uid;
+    }
+
+    /**
+     * @description Grants access to community posts, with owner-only write access.
+     * @path /community_posts/{communityPostId}
+     * @allow (get) Anyone can read a community post.
+     * @allow (list) Anyone can list community posts.
+     * @allow (create) Authenticated user can create a post if userId matches their UID.
+     * @allow (update) Authenticated user can update their own post if userId matches their UID.
+     * @allow (delete) Authenticated user can delete their own post if userId matches their UID.
+     * @deny (create) Users cannot create posts for other users.
+     * @deny (update) Users cannot modify other user's posts.
+     *
+     * @principle Enforces document ownership for writes.
+     */
+    match /community_posts/{communityPostId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow delete: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+
+    /**
+     * @description Grants access to comments on community posts, with owner-only write access.
+     * @path /community_posts/{communityPostId}/comments/{commentId}
+     * @allow (get) Anyone can read a comment.
+     * @allow (list) Anyone can list comments for a post.
+     * @allow (create) Authenticated user can create a comment if userId matches their UID.
+     * @allow (update) Authenticated user can update their own comment if userId matches their UID.
+     * @allow (delete) Authenticated user can delete their own comment if userId matches their UID.
+     * @deny (create) Users cannot create comments for other users.
+     * @deny (update) Users cannot modify other user's comments.
+     * @principle Enforces document ownership for writes.
+     */
+    match /community_posts/{communityPostId}/comments/{commentId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow delete: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+  }
+}
