@@ -9,8 +9,22 @@ import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const materials = ['All', 'Plastic', 'Paper', 'Fabric', 'Glass'];
+
+function getMockImage(craftId: string): string {
+    const imageIdMap: Record<string, string> = {
+        '1': 'buy-craft-plastic-planter',
+        '2': 'buy-craft-tshirt-bag',
+        '3': 'buy-craft-cardboard-art',
+        '4': 'buy-craft-jar-lanterns',
+        '5': 'buy-craft-paper-cranes',
+        '6': 'buy-craft-bird-feeder',
+    };
+    const image = PlaceHolderImages.find(p => p.id === imageIdMap[craftId]);
+    return image?.imageUrl || 'https://picsum.photos/seed/placeholder/600/400';
+}
 
 export default function CraftsPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -72,7 +86,7 @@ export default function CraftsPage() {
                 <CardHeader className="p-0">
                   <div className="relative h-48 w-full">
                     <Image
-                      src={`https://img.youtube.com/vi/${craft.youtubeId}/hqdefault.jpg`}
+                      src={getMockImage(craft.id)}
                       alt={craft.title}
                       fill
                       className="object-cover"
