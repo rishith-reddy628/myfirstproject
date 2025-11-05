@@ -19,3 +19,13 @@ export interface CommunityPost {
   comments: number;
   timestamp: string;
 }
+
+export interface MarketplaceListing {
+  id: string;
+  name: string;
+  price: number;
+  imageURL: string;
+  description: string;
+  material: string;
+  sellerId?: string;
+}
