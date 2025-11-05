@@ -13,8 +13,23 @@ import type { MarketplaceListing } from '@/lib/types';
 import { mockCrafts } from '@/lib/mock-data';
 import { collection, query } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const materials = ['All', 'Plastic', 'Paper', 'Fabric', 'Glass'];
+
+function getMockImage(craftId: string): string {
+    const imageIdMap: Record<string, string> = {
+        '1': 'buy-craft-plastic-planter',
+        '2': 'buy-craft-tshirt-bag',
+        '3': 'buy-craft-cardboard-art',
+        '4': 'buy-craft-jar-lanterns',
+        '5': 'buy-craft-paper-cranes',
+        '6': 'buy-craft-bird-feeder',
+    };
+    const image = PlaceHolderImages.find(p => p.id === imageIdMap[craftId]);
+    return image?.imageUrl || 'https://picsum.photos/seed/placeholder/600/400';
+}
+
 
 function BuyCraftClient() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -36,7 +51,7 @@ function BuyCraftClient() {
         description: l.description,
         price: l.price,
         imageURL: l.imageURL,
-        rating: 0, // No rating from firestore yet
+        rating: 0,
         reviewCount: 0,
         isFromFirestore: true
     })) : [];
@@ -47,7 +62,7 @@ function BuyCraftClient() {
         material: c.material,
         description: c.description,
         price: c.price,
-        imageURL: `https://img.youtube.com/vi/${c.youtubeId}/hqdefault.jpg`,
+        imageURL: getMockImage(c.id),
         rating: c.rating,
         reviewCount: c.reviewCount,
         youtubeId: c.youtubeId,
