@@ -1,6 +1,6 @@
 'use server';
 
-import { generateEcoCraftIdeas, GenerateEcoCraftIdeasInput } from '@/ai/flows/generate-eco-craft-ideas';
+import { generateEcoCraftIdeas, GenerateEcoCraftIdeasInput, GenerateEcoCraftIdeasOutput } from '@/ai/flows/generate-eco-craft-ideas';
 import { z } from 'zod';
 
 const schema = z.object({
@@ -9,7 +9,7 @@ const schema = z.object({
 
 export type FormState = {
   message: string;
-  craftIdeas?: string;
+  craftIdeas?: GenerateEcoCraftIdeasOutput['craftIdeas'];
   fields?: Record<string, string>;
   issues?: string[];
 };

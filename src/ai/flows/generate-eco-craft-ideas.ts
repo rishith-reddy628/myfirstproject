@@ -18,10 +18,16 @@ const GenerateEcoCraftIdeasInputSchema = z.object({
 });
 export type GenerateEcoCraftIdeasInput = z.infer<typeof GenerateEcoCraftIdeasInputSchema>;
 
+const CraftIdeaSchema = z.object({
+  title: z.string().describe("The title of the craft idea."),
+  description: z.string().describe("A short, engaging description of the craft idea."),
+  youtubeSearchQuery: z.string().describe("A concise and effective YouTube search query to find a tutorial for this specific craft idea (e.g., 'DIY plastic bottle planter').")
+});
+
 const GenerateEcoCraftIdeasOutputSchema = z.object({
   craftIdeas: z
-    .string()
-    .describe('A list of unique and creative eco-friendly craft ideas using the specified waste material.'),
+    .array(CraftIdeaSchema)
+    .describe('A list of 3-5 unique and creative eco-friendly craft ideas using the specified waste material.'),
 });
 export type GenerateEcoCraftIdeasOutput = z.infer<typeof GenerateEcoCraftIdeasOutputSchema>;
 
@@ -37,13 +43,12 @@ const prompt = ai.definePrompt({
   output: {schema: GenerateEcoCraftIdeasOutputSchema},
   prompt: `You are an AI assistant designed to inspire creativity and sustainability.
 
-  Generate a list of unique eco-friendly craft ideas using the following waste material:
+  Generate a list of 3-5 unique eco-friendly craft ideas using the following waste material:
 
   Material: {{{wasteMaterial}}}
 
-  Provide a variety of creative and practical ideas that encourage users to reuse materials and reduce waste.
+  For each idea, provide a title, a short description, and a simple YouTube search query that would lead to relevant video tutorials.
   Focus on originality, feasibility, and environmental impact.
-  Format the ideas as a numbered list.
   `,
 });
 
