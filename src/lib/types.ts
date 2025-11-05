@@ -18,6 +18,7 @@ export interface CommunityPost {
   caption: string;
   comments: number;
   timestamp: string;
+  material: string;
 }
 
 export interface MarketplaceListing {

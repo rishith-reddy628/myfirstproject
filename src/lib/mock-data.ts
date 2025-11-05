@@ -6,7 +6,7 @@ export const mockCrafts: Craft[] = [
     id: '1',
     title: 'DIY Plastic Bottle Planters',
     material: 'Plastic',
-    youtubeId: 'j65i5n33N4I', // A random relevant video ID
+    youtubeId: 'j65i5n33N4I',
     description: 'A simple and fun way to turn plastic waste into beautiful planters for your home or garden. This project is great for all ages and requires minimal tools.',
     rating: 4.5,
     reviewCount: 120,
@@ -16,7 +16,7 @@ export const mockCrafts: Craft[] = [
     id: '2',
     title: 'No-Sew T-Shirt Tote Bag',
     material: 'Fabric',
-    youtubeId: 't4_2m_aJ3-s',
+    youtubeId: 'r6N_gdGe6h4',
     description: 'Transform an old t-shirt into a stylish and durable tote bag without any sewing! Perfect for groceries, books, or as a unique fashion accessory.',
     rating: 4.8,
     reviewCount: 250,
@@ -73,7 +73,8 @@ export const mockCommunityPosts: CommunityPost[] = [
       postImageHint: PlaceHolderImages.find(p => p.id === 'community-post-1')?.imageHint || '',
       caption: "Made this bird feeder from a milk carton! The birds are loving it this morning. 🐦",
       comments: 12,
-      timestamp: '2h ago'
+      timestamp: '2h ago',
+      material: 'Paper',
     },
     {
       id: 'p2',
@@ -83,6 +84,7 @@ export const mockCommunityPosts: CommunityPost[] = [
       postImageHint: PlaceHolderImages.find(p => p.id === 'community-post-2')?.imageHint || '',
       caption: "My first attempt at a mosaic picture frame from some old tiles I had. So happy with how it turned out!",
       comments: 28,
-      timestamp: '1d ago'
+      timestamp: '1d ago',
+      material: 'Glass'
     }
 ]
