@@ -6,7 +6,7 @@ export const mockCrafts: Craft[] = [
     id: '1',
     title: 'DIY Plastic Bottle Planters',
     material: 'Plastic',
-    youtubeId: 'jPSy5-I3PEs',
+    youtubeId: 'Xs2hAWuPmSg',
     description: 'A simple and fun way to turn plastic waste into beautiful planters for your home or garden. This project is great for all ages and requires minimal tools.',
     rating: 4.5,
     reviewCount: 120,
