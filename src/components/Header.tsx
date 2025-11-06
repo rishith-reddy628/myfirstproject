@@ -9,6 +9,7 @@ import { useUser, useAuth } from '@/firebase';
 import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
+import { CartSheet } from './CartSheet';
 
 const navLinks = [
   { href: '/crafts', label: 'Browse Crafts' },
@@ -77,6 +78,7 @@ export function Header() {
               </Button>
             </>
           )}
+          <CartSheet />
         </div>
 
         <div className="md:hidden">
@@ -121,6 +123,7 @@ export function Header() {
                         </Button>
                      </>
                    )}
+                   <CartSheet />
                 </div>
               </div>
             </SheetContent>

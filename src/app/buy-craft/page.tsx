@@ -14,6 +14,8 @@ import { mockCrafts } from '@/lib/mock-data';
 import { collection, query } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { useCart } from '@/context/CartContext';
+import { useToast } from '@/hooks/use-toast';
 
 const materials = ['All', 'Plastic', 'Paper', 'Fabric', 'Glass'];
 
@@ -36,6 +38,9 @@ function BuyCraftClient() {
   const [selectedMaterial, setSelectedMaterial] = useState('All');
   
   const { firestore } = useFirebase();
+  const { addToCart } = useCart();
+  const { toast } = useToast();
+
   const listingsQuery = useMemoFirebase(() => {
     if (!firestore) return null;
     return query(collection(firestore, 'marketplace_listings'));
@@ -86,6 +91,21 @@ function BuyCraftClient() {
       return matchesSearch && matchesMaterial;
     });
   }, [allCrafts, searchTerm, selectedMaterial]);
+
+  const handleAddToCart = (craft: (typeof filteredCrafts)[0]) => {
+    if (!craft.price) return;
+    addToCart({
+        id: craft.id,
+        title: craft.title,
+        price: craft.price,
+        imageURL: craft.imageURL,
+        quantity: 1,
+    });
+    toast({
+        title: "Added to cart!",
+        description: `${craft.title} has been added to your cart.`,
+    });
+  };
 
   return (
     <>
@@ -173,7 +193,7 @@ function BuyCraftClient() {
                         </div>
                         {craft.price && <p className="text-lg font-semibold text-primary">${craft.price?.toFixed(2)}</p>}
                     </div>
-                    <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+                    <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90" onClick={() => handleAddToCart(craft)}>
                         <ShoppingCart className="mr-2 h-4 w-4"/>
                         Add to Cart
                     </Button>

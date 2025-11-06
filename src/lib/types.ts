@@ -30,3 +30,11 @@ export interface MarketplaceListing {
   material: string;
   sellerId?: string;
 }
+
+export interface CartItem {
+    id: string;
+    title: string;
+    price: number;
+    imageURL: string;
+    quantity: number;
+}
