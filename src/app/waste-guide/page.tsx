@@ -50,7 +50,7 @@ export default function WasteGuidePage() {
             <div className="aspect-video w-full overflow-hidden rounded-lg border">
                 <iframe
                     className="w-full h-full"
-                    src="https://www.youtube.com/embed/O-08_3ssiZg"
+                    src="https://www.youtube.com/embed/FORrE5dB2gc"
                     title="Dry Waste Segregation"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
