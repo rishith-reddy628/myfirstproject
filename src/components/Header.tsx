@@ -1,10 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { Menu } from 'lucide-react';
+import { Menu, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Logo } from './Logo';
+import { useUser, useAuth } from '@/firebase';
+import { signOut } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
 
 const navLinks = [
   { href: '/crafts', label: 'Browse Crafts' },
@@ -16,6 +20,27 @@ const navLinks = [
 ];
 
 export function Header() {
+  const { user, isUserLoading } = useUser();
+  const auth = useAuth();
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      toast({
+        title: 'Logged out successfully',
+      });
+      router.push('/');
+    } catch (error) {
+      toast({
+        title: 'Logout Failed',
+        description: (error as Error).message,
+        variant: 'destructive',
+      });
+    }
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-7xl items-center justify-between">
@@ -35,12 +60,23 @@ export function Header() {
         </div>
 
         <div className="hidden items-center gap-2 md:flex">
-          <Button variant="ghost" asChild>
-            <Link href="/login">Log in</Link>
-          </Button>
-          <Button className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
-            <Link href="/signup">Sign Up</Link>
-          </Button>
+          {isUserLoading ? (
+             <div className="h-10 w-24 animate-pulse rounded-md bg-muted" />
+          ) : user ? (
+            <Button variant="ghost" onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4" />
+              Log Out
+            </Button>
+          ) : (
+            <>
+              <Button variant="ghost" asChild>
+                <Link href="/login">Log in</Link>
+              </Button>
+              <Button className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
+                <Link href="/signup">Sign Up</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         <div className="md:hidden">
@@ -68,12 +104,23 @@ export function Header() {
                   ))}
                 </nav>
                 <div className="mt-8 flex flex-col gap-2">
-                   <Button variant="ghost" asChild>
-                     <Link href="/login">Log in</Link>
-                   </Button>
-                   <Button className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
-                     <Link href="/signup">Sign Up</Link>
-                   </Button>
+                   {isUserLoading ? (
+                      <div className="h-10 w-full animate-pulse rounded-md bg-muted" />
+                   ) : user ? (
+                     <Button variant="ghost" onClick={handleLogout}>
+                       <LogOut className="mr-2 h-4 w-4" />
+                       Log Out
+                     </Button>
+                   ) : (
+                     <>
+                        <Button variant="ghost" asChild>
+                          <Link href="/login">Log in</Link>
+                        </Button>
+                        <Button className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
+                          <Link href="/signup">Sign Up</Link>
+                        </Button>
+                     </>
+                   )}
                 </div>
               </div>
             </SheetContent>
