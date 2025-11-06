@@ -16,7 +16,7 @@ export const mockCrafts: Craft[] = [
     id: '2',
     title: 'No-Sew T-Shirt Tote Bag',
     material: 'Fabric',
-    youtubeId: '0mn-sQ2mYrg',
+    youtubeId: 'lVlshh42i7E',
     description: 'Transform an old t-shirt into a stylish and durable tote bag without any sewing! Perfect for groceries, books, or as a unique fashion accessory.',
     rating: 4.8,
     reviewCount: 250,
