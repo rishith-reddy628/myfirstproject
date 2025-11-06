@@ -77,7 +77,7 @@ export default function WasteGuidePage() {
             <div className="aspect-video w-full overflow-hidden rounded-lg border">
                 <iframe
                     className="w-full h-full"
-                    src="https://www.youtube.com/embed/a3yQj-OQnsc"
+                    src="https://www.youtube.com/embed/zy70DAaeFBI"
                     title="Wet Waste Composting"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
